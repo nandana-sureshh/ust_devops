@@ -1,0 +1,16 @@
+Python Scripting
+
+Scenario
+--------
+To find all the processes that uses more than 20% of the CPU
+		--------------------------------------
+		
+When one process starts using too much of the CPU, the performance of the system slows down.
+So, Identifying such processes can help to either terminate or kill the process inorder the restore the system performance.
+
+STEPS
+-----
+Step1: Prime CPU% measurement
+Step2: Short wait to allow actual CPU% to be calculated.
+Step3: Set up the threshold limit.
+Step4: Iterate through each process and filter the processes that uses CPU more that the threshold value.
