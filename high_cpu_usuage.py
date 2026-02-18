@@ -1,23 +1,20 @@
-import psutil
-import time
+import psutil #to read system info
+import time     #to pause execution 
 
-# Step 1: Prime CPU % measurement
 for p in psutil.process_iter():
     try:
         p.cpu_percent()
     except:
         pass
 
-# Step 2: Short wait to allow actual CPU% to be calculated
 time.sleep(1)
 
-# Step 3: Threshold
-THRESHOLD = 20  # show processes using more than 20% CPU
+
+THRESHOLD = 20  
 
 print(f"\nProcesses using more than {THRESHOLD}% CPU:\n")
 print(f"{'PID':>6} {'CPU%':>6}   NAME")
 
-# Step 4: Iterate processes and filter
 for p in psutil.process_iter(['pid', 'name']):
     try:
         cpu = p.cpu_percent(interval=None)
