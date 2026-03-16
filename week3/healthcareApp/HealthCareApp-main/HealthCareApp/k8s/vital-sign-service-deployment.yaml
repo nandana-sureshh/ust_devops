@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vital-sign-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vital-sign-service
+  template:
+    metadata:
+      labels:
+        app: vital-sign-service
+    spec:
+      containers:
+      - name: vital-sign-service
+        image: revanth654/vital-sign-service:v1
+        ports:
+        - containerPort: 3003
+        env:
+        - name: PORT
+          value: "3003"
+        - name: DB_HOST
+          value: vital-db
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: healthcare_root_2024
+        - name: DB_NAME
+          value: vital_sign_db

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: complaint-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: complaint-service
+  template:
+    metadata:
+      labels:
+        app: complaint-service
+    spec:
+      containers:
+      - name: complaint-service
+        image: revanth654/complaint-service:v1
+        ports:
+        - containerPort: 3008
+        env:
+        - name: PORT
+          value: "3008"
+        - name: DB_HOST
+          value: complaint-db
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: healthcare_root_2024
+        - name: DB_NAME
+          value: complaint_db

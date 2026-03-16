@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: version-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: version-demo
+  template:
+    metadata:
+      labels:
+        app: version-demo
+    spec:
+      containers:
+      - name: version-app
+        image: revanth654/version-app:v1
+        ports:
+        - containerPort: 5000

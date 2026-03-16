@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vital-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vital-db
+  template:
+    metadata:
+      labels:
+        app: vital-db
+    spec:
+      containers:
+      - name: vital-db
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: healthcare_root_2024
+        - name: MYSQL_DATABASE
+          value: vital_sign_db

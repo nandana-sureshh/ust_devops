@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: complaint-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: complaint-db
+  template:
+    metadata:
+      labels:
+        app: complaint-db
+    spec:
+      containers:
+      - name: complaint-db
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: healthcare_root_2024
+        - name: MYSQL_DATABASE
+          value: complaint_db

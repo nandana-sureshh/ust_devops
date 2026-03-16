@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forum-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forum-service
+  template:
+    metadata:
+      labels:
+        app: forum-service
+    spec:
+      containers:
+      - name: forum-service
+        image: revanth654/forum-service:v1
+        ports:
+        - containerPort: 3007
+        env:
+        - name: PORT
+          value: "3007"
+        - name: DB_HOST
+          value: forum-db
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: healthcare_root_2024
+        - name: DB_NAME
+          value: forum_db

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-management-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-management-service
+  template:
+    metadata:
+      labels:
+        app: user-management-service
+    spec:
+      containers:
+      - name: user-management-service
+        image: revanth654/user-management-service:v1
+        ports:
+        - containerPort: 3002
+        env:
+        - name: PORT
+          value: "3002"
+        - name: DB_HOST
+          value: user-db
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: healthcare_root_2024
+        - name: DB_NAME
+          value: user_management_db
+        - name: JWT_SECRET
+          value: mysecret

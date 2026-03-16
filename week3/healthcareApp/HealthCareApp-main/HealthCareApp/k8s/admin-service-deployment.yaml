@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-service
+  template:
+    metadata:
+      labels:
+        app: admin-service
+    spec:
+      containers:
+      - name: admin-service
+        image: revanth654/admin-service:v1
+        ports:
+        - containerPort: 3009
+        env:
+        - name: PORT
+          value: "3009"
+        - name: USER_SERVICE_URL
+          value: http://user-management-service:3002
+        - name: DOCTOR_SERVICE_URL
+          value: http://doctor-service:3005
+        - name: APPOINTMENT_SERVICE_URL
+          value: http://appointment-service:3001
+        - name: REGISTRATION_SERVICE_URL
+          value: http://registration-service:3004
+        - name: VITAL_SERVICE_URL
+          value: http://vital-sign-service:3003
+        - name: FORUM_SERVICE_URL
+          value: http://forum-service:3007
+        - name: COMPLAINT_SERVICE_URL
+          value: http://complaint-service:3008

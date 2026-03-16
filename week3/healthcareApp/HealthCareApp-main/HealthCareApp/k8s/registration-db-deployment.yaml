@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registration-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registration-db
+  template:
+    metadata:
+      labels:
+        app: registration-db
+    spec:
+      containers:
+      - name: registration-db
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: healthcare_root_2024
+        - name: MYSQL_DATABASE
+          value: registration_db
