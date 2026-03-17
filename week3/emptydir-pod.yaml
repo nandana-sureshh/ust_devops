@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-pod
+spec:
+  containers:
+  - name: container-1
+    image: ubuntu
+    command: ["/bin/bash","-c","while true; do echo DevOps-volume >> /tmp/container-1/data.txt; sleep 5; done"]
+    volumeMounts:
+    - name: emptydir-vol
+      mountPath: /tmp/container-1
+
+  - name: container-2
+    image: ubuntu
+    command: ["/bin/bash","-c","while true; do cat /tmp/container-2/data.txt; sleep 5; done"]
+    volumeMounts:
+    - name: emptydir-vol
+      mountPath: /tmp/container-2
+
+  volumes:
+  - name: emptydir-vol
+    emptyDir: {}
