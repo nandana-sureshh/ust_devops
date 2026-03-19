@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaCare - Modern Health Platform</title>
+    <meta name="description" content="A comprehensive health tracking and management platform">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar glass-panel">
+            <div class="logo">
+                <h2 id="logo-text">💙 VitaCare</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-target="dashboard" id="nav-dashboard">Dashboard</li>
+                <li data-target="appointments" id="nav-appointments">Appointments</li>
+                <li data-target="records" id="nav-records">Health Records</li>
+                <li data-target="pharmacy" id="nav-pharmacy">Pharmacy</li>
+            </ul>
+            <div class="auth-section">
+                <!-- Login or Profile -->
+                <button id="loginBtn" class="primary-btn mt-4 full-width">Login / Register</button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area glass-panel glass-scrollbar">
+            <header>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p class="subtitle">Welcome to your central health coordination hub.</p>
+            </header>
+
+            <section id="dashboard" class="page active">
+                <div class="dashboard-grid">
+                    <div class="card glass-card fade-up" style="animation-delay: 0.1s;">
+                        <h3>Upcoming Appointment</h3>
+                        <p id="dash-appointment" class="text-highlight">Loading data from Appointment Service...</p>
+                    </div>
+                    <div class="card glass-card fade-up" style="animation-delay: 0.2s;">
+                        <h3>Recent Records</h3>
+                        <p id="dash-records" class="text-highlight">Loading data from Records Service...</p>
+                    </div>
+                    <div class="card glass-card fade-up" style="animation-delay: 0.3s;">
+                        <h3>Active Prescriptions</h3>
+                        <p id="dash-pharmacy" class="text-highlight">Loading data from Pharmacy Service...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="appointments" class="page">
+                <h2>Book an Appointment</h2>
+                <div id="doctors-list" class="grid-list fade-up"></div>
+            </section>
+
+            <section id="records" class="page">
+                <h2>Your Health Records</h2>
+                <div id="records-list" class="grid-list fade-up mb-4"></div>
+                <div class="upload-area glass-card fade-up">
+                    <h3>Upload New Document</h3>
+                    <input type="file" id="recordFile" class="fancy-input mt-4">
+                    <button class="primary-btn mt-4 pulse-hover" onclick="uploadRecord()">Securely Upload</button>
+                </div>
+            </section>
+
+            <section id="pharmacy" class="page">
+                <h2>Pharmacy Central</h2>
+                <div class="search-bar fade-up">
+                    <input type="text" id="medSearch" placeholder="Search medicines and verified prescriptions..." class="fancy-input">
+                    <button class="primary-btn mt-4 pulse-hover" onclick="searchMedicines()">Search Inventory</button>
+                </div>
+                <div id="medicine-list" class="grid-list fade-up mt-4"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content glass-panel popup-anim">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 class="mb-4">Secure Sign In</h2>
+            <input type="text" id="username" placeholder="Username (JWT Auth via User Service)" class="fancy-input">
+            <input type="password" id="password" placeholder="Password" class="fancy-input">
+            <button class="primary-btn full-width mt-4" onclick="login()">Authenticate</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

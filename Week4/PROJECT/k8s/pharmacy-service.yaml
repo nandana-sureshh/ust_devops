@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pharmacy-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pharmacy-service
+  template:
+    metadata:
+      labels:
+        app: pharmacy-service
+    spec:
+      containers:
+        - name: pharmacy-service
+          image: nandana2002/pharmacy-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8084
+          env:
+            - name: DATABASE_URL
+              value: postgresql://admin:password123@postgres-pharmacy-svc:5432/db_pharmacy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pharmacy-service-svc
+spec:
+  selector:
+    app: pharmacy-service
+  ports:
+    - port: 8084
+      targetPort: 8084
