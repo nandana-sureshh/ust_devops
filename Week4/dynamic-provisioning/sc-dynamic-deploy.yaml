@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamic-nfs-deploy
+  namespace: volume-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dynamic-nfs
+  template:
+    metadata:
+      labels:
+        app: dynamic-nfs
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - while true; do echo DYNAMIC >> /data/file.txt; sleep 5; done
+        volumeMounts:
+        - name: nfs-vol
+          mountPath: /data
+      volumes:
+      - name: nfs-vol
+        persistentVolumeClaim:
+          claimName: sc-dynamic-pvc
