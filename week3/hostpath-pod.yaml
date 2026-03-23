@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-pod
+spec:
+  nodeName: ip-172-31-1-173
+  containers:
+  - name: hostpath-container
+    image: busybox
+    command: ["/bin/sh","-c","while true; do echo HOSTPATH-WORKING >> /data/file.txt; sleep 5; done"]
+    volumeMounts:
+    - name: host-vol
+      mountPath: /data
+
+  volumes:
+  - name: host-vol
+    hostPath:
+      path: /host-data
+      type: DirectoryOrCreate
