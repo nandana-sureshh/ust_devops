@@ -1,0 +1,101 @@
+# ════════════════════════════════════════════════════
+# MongoDB StatefulSet — Dynamic Provisioning
+# ════════════════════════════════════════════════════
+#
+# KEY CHANGES from v1:
+# 1. volumeClaimTemplates now use storageClassName: nfs-dynamic
+#    (was: storageClassName: manual with static PV)
+# 2. No manual PV creation needed — NFS provisioner handles it
+# 3. Added init container to verify NFS mount is working
+#
+# WHY StatefulSet over Deployment for databases:
+# - Stable network identity: mongodb-0, mongodb-1 (always the same)
+# - Ordered deployment: mongodb-0 starts before mongodb-1
+# - Persistent storage: each replica gets its own PVC that survives restarts
+# - Ordered deletion: mongodb-1 deleted before mongodb-0
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: infra
+  labels:
+    app: mongodb
+spec:
+  serviceName: mongodb-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      # ─── Init Container: verify storage is writable ───
+      initContainers:
+        - name: init-check-storage
+          image: busybox:1.36
+          command: ['sh', '-c', 'echo "Storage check: $(date)" > /data/db/.storage-test && echo "Storage OK" && rm /data/db/.storage-test']
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+      containers:
+        - name: mongodb
+          image: mongo:7.0
+          ports:
+            - containerPort: 27017
+              name: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secrets
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secrets
+                  key: MONGO_INITDB_ROOT_PASSWORD
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            exec:
+              command:
+                - mongosh
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - mongosh
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+  # ─── Dynamic PVC via volumeClaimTemplates ───
+  # Each replica gets its own PVC: mongodb-data-mongodb-0, mongodb-data-mongodb-1, etc.
+  # PVCs persist even if the StatefulSet is deleted
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        storageClassName: nfs-dynamic   # Dynamic provisioning via NFS
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi

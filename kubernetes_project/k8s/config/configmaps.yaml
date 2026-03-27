@@ -1,0 +1,37 @@
+# ─── Backend ConfigMap ───
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: backend
+data:
+  MONGO_URI: "mongodb://mongodb-0.mongodb-headless.infra.svc.cluster.local:27017"
+  RABBITMQ_URL: "amqp://rabbitmq.infra.svc.cluster.local:5672"
+  JWT_EXPIRY: "24h"
+---
+# ─── Infra ConfigMap ───
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: infra-config
+  namespace: infra
+data:
+  MONGO_INITDB_DATABASE: "healthcare"
+  RABBITMQ_DEFAULT_USER: "guest"
+  RABBITMQ_DEFAULT_PASS: "guest"
+---
+# ─── Frontend ConfigMap ───
+# In K8s, all services sit behind the Gateway at the same origin,
+# so all VITE_*_API values are empty (relative /api/* paths work).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: frontend
+data:
+  VITE_USER_API: ""
+  VITE_DOCTOR_API: ""
+  VITE_LAB_API: ""
+  VITE_AMBULANCE_API: ""
+  VITE_PHARMACY_API: ""
+  VITE_RECORDS_API: ""
